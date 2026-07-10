@@ -23,11 +23,22 @@ export class CheckoutPage {
         this.buttonFinish = page.getByRole('button', {name:'finish'});
     }
 
+    async addItemToCart(item: string) {
+        await this.page.getByText(item).click();
+        await this.addToCart.click();
+    }
+
     async checkout(firstname: string, lastname: string, zipcode: string) {
+        await this.shoppingCart.click();
+        await this.buttonCheckout.click();
         await this.firstName.fill(firstname);
         await this.lastName.fill(lastname);
         await this.zipCode.fill(zipcode);
         await this.buttonContinue.click();
-  }
+        await this.buttonFinish.click();
+    }
+
+
+
   
 }

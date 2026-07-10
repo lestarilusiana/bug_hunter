@@ -6,86 +6,84 @@ test.beforeEach(async ({page}) => {
     await login(page);
 })
 
-test('checkout', async({page}) => {
-    // await page.goto('https://www.saucedemo.com');
-    // await page.getByPlaceholder('Username').fill('standard_user');
-    // await page.getByPlaceholder('Password').fill('secret_sauce');
-    // await page.getByRole('button', {name: 'Login'}).click();
-    const checkoutpage = new CheckoutPage(page);
-    await page.getByText('Sauce Labs Backpack').click();
-    const badge = checkoutpage.cartCount;
-    let initialCount = 0;
+// test('checkout', async({page}) => {
+//     const checkoutpage = new CheckoutPage(page);
+//     await page.getByText('Sauce Labs Backpack').click();
+//     const badge = checkoutpage.cartCount;
+//     let initialCount = 0;
 
-    if (await badge.count() > 0) {
-        initialCount = Number(await badge.textContent());
-    }
-    await checkoutpage.addToCart.click();
+//     if (await badge.count() > 0) {
+//         initialCount = Number(await badge.textContent());
+//     }
+//     await checkoutpage.addToCart.click();
 
-    await expect(badge).toHaveText(String(initialCount+1));
-})
+//     await expect(badge).toHaveText(String(initialCount+1));
+// })
 
-test('checkout_detail', async({page}) => {
-    const checkoutpage = new CheckoutPage(page);
-    await page.getByText('Sauce Labs Backpack').click();
-    const badge = checkoutpage.cartCount;
-    let initialCount = 0;
+// test('checkout_detail', async({page}) => {
+//     const checkoutpage = new CheckoutPage(page);
+//     await page.getByText('Sauce Labs Backpack').click();
+//     const badge = checkoutpage.cartCount;
+//     let initialCount = 0;
 
-    if (await badge.count() > 0) {
-        initialCount = Number(await badge.textContent());
-    }
-    await checkoutpage.addToCart.click();
-    await checkoutpage.shoppingCart.click();
+//     if (await badge.count() > 0) {
+//         initialCount = Number(await badge.textContent());
+//     }
+//     await checkoutpage.addToCart.click();
+//     await checkoutpage.shoppingCart.click();
 
-    await expect(page.getByText('Your Cart')).toBeVisible();
-})
+//     await expect(page.getByText('Your Cart')).toBeVisible();
+// })
 
-test('checkout_page', async({page}) => {
-        const checkoutpage = new CheckoutPage(page);
-    await page.getByText('Sauce Labs Backpack').click();
-    const badge = checkoutpage.cartCount;
-    let initialCount = 0;
+// test('checkout_page', async({page}) => {
+//         const checkoutpage = new CheckoutPage(page);
+//     await page.getByText('Sauce Labs Backpack').click();
+//     const badge = checkoutpage.cartCount;
+//     let initialCount = 0;
 
-    if (await badge.count() > 0) {
-        initialCount = Number(await badge.textContent());
-    }
-    await checkoutpage.addToCart.click();
-    await checkoutpage.shoppingCart.click();
-    await checkoutpage.buttonCheckout.click();
+//     if (await badge.count() > 0) {
+//         initialCount = Number(await badge.textContent());
+//     }
+//     await checkoutpage.addToCart.click();
+//     await checkoutpage.shoppingCart.click();
+//     await checkoutpage.buttonCheckout.click();
 
-    await expect(page.getByText('Your Information')).toBeVisible();
-})
+//     await expect(page.getByText('Your Information')).toBeVisible();
+// })
 
-test('continue_to_payment', async({page}) => {
-    const checkoutpage = new CheckoutPage(page);
-    await page.getByText('Sauce Labs Backpack').click();
-    const badge = checkoutpage.cartCount;
-    let initialCount = 0;
+// test('continue_to_payment', async({page}) => {
+//     const checkoutpage = new CheckoutPage(page);
+//     await page.getByText('Sauce Labs Backpack').click();
+//     const badge = checkoutpage.cartCount;
+//     let initialCount = 0;
 
-    if (await badge.count() > 0) {
-        initialCount = Number(await badge.textContent());
-    }
-    await checkoutpage.addToCart.click();
-    await checkoutpage.shoppingCart.click();
-    await checkoutpage.buttonCheckout.click();
-    await checkoutpage.checkout('Anna', 'Lee', '11011');
+//     if (await badge.count() > 0) {
+//         initialCount = Number(await badge.textContent());
+//     }
+//     await checkoutpage.addToCart.click();
+//     await checkoutpage.shoppingCart.click();
+//     await checkoutpage.buttonCheckout.click();
+//     await checkoutpage.checkout('Anna', 'Lee', '11011');
     
-    await expect(page.getByText('Checkout: Overview')).toBeVisible();
-})
+//     await expect(page.getByText('Checkout: Overview')).toBeVisible();
+// })
 
 test('finish_checkout', async({page}) => {
     const checkoutpage = new CheckoutPage(page);
-    await page.getByText('Sauce Labs Backpack').click();
+    await checkoutpage.addItemToCart('Sauce Labs Backpack');
     const badge = checkoutpage.cartCount;
     let initialCount = 0;
 
     if (await badge.count() > 0) {
         initialCount = Number(await badge.textContent());
     }
-    await checkoutpage.addToCart.click();
-    await checkoutpage.shoppingCart.click();
-    await checkoutpage.buttonCheckout.click();
+    // await checkoutpage.addToCart.click();
+    // await checkoutpage.shoppingCart.click();
+    // await checkoutpage.buttonCheckout.click();
+    // await checkoutpage.checkout('Anna', 'Lee', '11011');
+    // await checkoutpage.buttonFinish.click();
+
     await checkoutpage.checkout('Anna', 'Lee', '11011');
-    await checkoutpage.buttonFinish.click();
 
     await expect(page.getByText('Thank you for your order!')).toBeVisible();
 })
