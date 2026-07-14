@@ -1,31 +1,42 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/fixture';
 
+test.use({
+  storageState: { cookies: [], origins: [] },
+});
 
-test('login success', async({ page }) => {
-    await page.goto('https://www.saucedemo.com');
-    await page.getByPlaceholder('Username').fill('standard_user');
-    await page.getByPlaceholder('Password').fill('secret_sauce');
-    await page.getByRole('button', {name: 'Login'}).click();
+test('Login Success', async({ page, loginpage }) => {
+    await loginpage.login('standard_user', 'secret_sauce'); 
 
     await expect(page.getByText('Products')).toBeVisible();
 });
 
-test('login fail', async({page}) => {
-    await page.goto('https://www.saucedemo.com');
-    await page.getByPlaceholder('Username').fill('locked_out_user');
-    await page.getByPlaceholder('Password').fill('secret_sauce');
-    await page.getByRole('button', {name: 'Login'}).click();
+test('Locked User', async({page, loginpage}) => {
+    await loginpage.login('locked_out_user', 'secret_sauce'); 
 
-    await expect(page.locator('[data-test="error"]')).toContainText('locked out');
+    await expect(loginpage.errormessage).toContainText('locked out');
 })
 
-test ('login_wrong_credentials', async({page}) => {
-    await page.goto('https://www.saucedemo.com');
-    await page.getByPlaceholder('Username').fill('problem_user');
-    await page.getByPlaceholder('Password').fill('secret');
-    await page.getByRole('button', {name: 'Login'}).click();
+test ('Wrong Credentials', async({page, loginpage}) => {
+    await loginpage.login('problem_user', 'secret'); 
 
-    const error = page.locator('[data-test="error"]');
-    console.log(await error.textContent());
-    await expect(error).toContainText('do not match');
+    await expect(loginpage.errormessage).toContainText('do not match');
+})
+
+test ('Username Empty', async({page, loginpage}) => {
+    await loginpage.login('', 'secret_sauce');
+
+    await expect(loginpage.errormessage).toContainText('Username is required');
+
+})
+
+test ('Password Empty', async({page, loginpage}) => {
+    await loginpage.login('standard_user', '');  
+    
+    await expect(loginpage.errormessage).toContainText('Password is required');
+})
+
+test ('Username & Password Empty', async({page, loginpage}) => {
+    await loginpage.login('', '');  
+    
+    await expect(loginpage.errormessage).toContainText('Username is required');
 })

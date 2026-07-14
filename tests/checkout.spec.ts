@@ -2,9 +2,9 @@ import {test, expect} from '@playwright/test';
 import {login} from '../utils/login';
 import { CheckoutPage } from '../pages/CheckoutPage';
 
-test.beforeEach(async ({page}) => {
-    await login(page);
-})
+// test.beforeEach(async ({page}) => {
+//     await login(page);
+// })
 
 // test('checkout', async({page}) => {
 //     const checkoutpage = new CheckoutPage(page);
@@ -69,6 +69,7 @@ test.beforeEach(async ({page}) => {
 // })
 
 test('finish_checkout', async({page}) => {
+    await page.goto('https://www.saucedemo.com/inventory.html');
     const checkoutpage = new CheckoutPage(page);
     await checkoutpage.addItemToCart('Sauce Labs Backpack');
     const badge = checkoutpage.cartCount;
